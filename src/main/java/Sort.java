@@ -32,6 +32,9 @@ public class Sort {
 
         //bubbleSort(randomCase);
         insertionSort(randomCase);
+        selectionSort(randomCase);
+        mergeSort(randomCase, randomCase.length);
+        heapSort(randomCase);
 
     }
 
@@ -93,6 +96,112 @@ public class Sort {
         System.out.println("Number of interactions: " + numberOfInteractions);
     }
 
+    static void selectionSort(int[] numberVector){
+        int n = numberVector.length;
+        for (int i = 0; i < n - 1; i++) {
 
+            // Assume the current position holds
+            // the minimum element
+            int min_idx = i;
+
+            // Iterate through the unsorted portion
+            // to find the actual minimum
+            for (int j = i + 1; j < n; j++) {
+                if (numberVector[j] < numberVector[min_idx]) {
+
+                    // Update min_idx if a smaller element
+                    // is found
+                    min_idx = j;
+                }
+            }
+
+            // Move minimum element to its
+            // correct position
+            int temp = numberVector[i];
+            numberVector[i] = numberVector[min_idx];
+            numberVector[min_idx] = temp;
+        }
+    }
+
+    public static void mergeSort(int[] numberVector, int n) {
+        if (n < 2) {
+            return;
+        }
+        int mid = n / 2;
+        int[] l = new int[mid];
+        int[] r = new int[n - mid];
+
+        for (int i = 0; i < mid; i++) {
+            l[i] = numberVector[i];
+        }
+        for (int i = mid; i < n; i++) {
+            r[i - mid] = numberVector[i];
+        }
+        mergeSort(l, mid);
+        mergeSort(r, n - mid);
+
+        merge(numberVector, l, r, mid, n - mid);
+    }
+
+    public static void merge(
+            int[] a, int[] l, int[] r, int left, int right) {
+
+        int i = 0, j = 0, k = 0;
+        while (i < left && j < right) {
+            if (l[i] <= r[j]) {
+                a[k++] = l[i++];
+            }
+            else {
+                a[k++] = r[j++];
+            }
+        }
+        while (i < left) {
+            a[k++] = l[i++];
+        }
+        while (j < right) {
+            a[k++] = r[j++];
+        }
+    }
+
+    public static void heapSort(int arr[]) {
+        int n = arr.length;
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(arr, n, i);
+        }
+
+        // Heap sort
+        for (int i = n - 1; i >= 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            // Heapify root element
+            heapify(arr, i, 0);
+        }
+    }
+
+    public static void heapify(int arr[], int n, int i) {
+        // Find largest among root, left child and right child
+        int largest = i;
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+
+        if (l < n && arr[l] > arr[largest])
+            largest = l;
+
+        if (r < n && arr[r] > arr[largest])
+            largest = r;
+
+        // Swap and continue heapifying if root is not largest
+        if (largest != i) {
+            int swap = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+
+            heapify(arr, n, largest);
+        }
+    }
 
 }
