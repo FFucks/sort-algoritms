@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Sort {
 
     private static final int INIT_VALUE = 0;
-    private static final int MAX_VALUE = 5;
+    private static final int MAX_VALUE = 10;
 
     public static void main(String[] args) {
 
@@ -28,45 +28,74 @@ public class Sort {
                 .mapToInt(Integer::intValue)
                 .toArray();
 
+        //int [] defaultValue = {4, 3, 6, 8, 7, 1, 0, 5, 2, 9};
+        int [] defaultValue = {0, 3, 1, 4, 2};
+
         //System.out.println(Arrays.toString(randomCase));
 
-        //bubbleSort(randomCase);
-        insertionSort(randomCase);
-        selectionSort(randomCase);
-        mergeSort(randomCase, randomCase.length);
-        heapSort(randomCase);
+        bubbleSort(worstCase);
+        //insertionSort(randomCase);
+        //selectionSort(randomCase);
+        //mergeSort(randomCase, randomCase.length);
+        //heapSort(defaultValue);
 
     }
 
     /*
+        -------------------------------- Big O Notation ------------------------------
+        O(1) (Constante): O tempo de execução é constante, não importa o tamanho da entrada.
+        O(log n) (Logarítmico): O tempo de execução cresce muito lentamente.
+        O(n) (Linear): O tempo de execução cresce diretamente com o tamanho da entrada.
+        O(n log n): (Linear logaritmico) O tempo de execução cresce com o tamanho da entrada multiplicado pela entrada lentamente.
+        O(n²) (Quadrático): O tempo de execução cresce exponencialmente com o quadrado do tamanho da entrada (geralmente menos eficiente para grandes entradas).
+        O(2ⁿ) (Exponencial): O tempo de execução cresce muito rapidamente, tornando-se impraticável para entradas moderadamente grandes.
+        --------------------------------------------------------------------------------
+    */
+
+
+
+
+    /*
+
+
         Complexidade Pior caso:             O(n^{2})
         Complexidade Caso medio:            O(n^{2})
         Complexidade Melhor caso:           O(n)
         Complexidade de espaços pior caso:  O(1) auxiliar
+        Sorting in place: Yes (Dont need extra list)
+        Stable: Yes (value on correct index dont change his initial position)
      */
-    public static void bubbleSort(int[] numberVector) {
-        boolean swap;
-        int aux;
-        int numberOfInteractions = 0;
+    public static void bubbleSort(int[] array) {
 
-        System.out.println(Arrays.toString(numberVector));
+        /*System.out.println(Arrays.toString(array));
+        int numberOfComparisons = 0;
+        int numberOfSwaps = 0;
+*/
+        int index = 0;
+        int length = array.length;
+        boolean swapNeeded = true;
 
-        do {
-            swap = false;
-            for (int i = 0; i < numberVector.length - 1; i++) {
-                if (numberVector[i] > numberVector[i +1]) {
-                    aux = numberVector[i];
-                    numberVector[i] = numberVector[i +1];
-                    numberVector[i +1] = aux;
-                    swap = true;
-                    numberOfInteractions ++;
-
-                    System.out.println(Arrays.toString(numberVector));
+        while (index < length - 1 && swapNeeded) {
+            swapNeeded = false;
+            //numberOfComparisons++;
+            for (int compareIndex = 1; compareIndex < length - index; compareIndex++) {
+                //numberOfComparisons++;
+                if (array[compareIndex - 1] > array[compareIndex]) {
+                    //numberOfSwaps++;
+                    int aux = array[compareIndex - 1];
+                    array[compareIndex - 1] = array[compareIndex];
+                    array[compareIndex] = aux;
+                    swapNeeded = true;
                 }
             }
-        } while (swap);
-
-        System.out.println("Number of interactions: " + numberOfInteractions);
+            if(!swapNeeded) {
+                break;
+            }
+            index++;
+        }
+        //System.out.println(Arrays.toString(array));
+        //System.out.println("Number of comparisons: " + numberOfComparisons);
+        //System.out.println("Number of swaps: " + numberOfSwaps);
     }
 
     /*
@@ -74,23 +103,26 @@ public class Sort {
         Complexidade Caso medio:            O(n^{2})
         Complexidade Melhor caso:           O(n)
         Complexidade de espaços pior caso:  O(n) total, O(1) auxiliar
+        Sorting In Place: Yes (Dont need extra list)
+        Stable: Yes (value on correct index dont change his initial position)
      */
     public static void insertionSort(int[] numberVector) {
         int numberOfInteractions = 0;
 
-        for (int i = 1; i < numberVector.length; i++){
+        for (int index = 1; index < numberVector.length; index++){
+            numberOfInteractions ++;
+            System.out.println(Arrays.toString(numberVector));
+            int key = numberVector[index];
+            int compareIndex = index;
 
-            int aux = numberVector[i];
-            int j = i;
-
-            while ((j > 0) && (numberVector[j - 1] > aux)){
-                numberVector[j] = numberVector[j - 1];
-                j -= 1;
-
+            while ((compareIndex > 0) && (numberVector[compareIndex - 1] > key)){
                 numberOfInteractions ++;
-                //System.out.println(Arrays.toString(numberVector));
+                numberVector[compareIndex] = numberVector[compareIndex - 1];
+                compareIndex -= 1;
+
+                System.out.println(Arrays.toString(numberVector));
             }
-            numberVector[j] = aux;
+            numberVector[compareIndex] = key;
             System.out.println(Arrays.toString(numberVector));
         }
         System.out.println("Number of interactions: " + numberOfInteractions);
@@ -163,45 +195,59 @@ public class Sort {
         }
     }
 
-    public static void heapSort(int arr[]) {
-        int n = arr.length;
+    /*
+        Sort que utiliza arvore binaria, funciona em duas etapas, primeiro ordena os nodos com valores maiores que os leafs,
+        depois faz o sort pegando o topo da piramide com o ultimo leaf (ponta do array), desconsidera o valor adicionado nas seguintes trocas e faz o processo novamente.
 
-        // Build max heap
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(arr, n, i);
+        Complexidade Pior caso:             O(n log n)
+        Complexidade Caso medio:            O(n log n)
+        Complexidade Melhor caso:           O(n log n)
+        Complexidade de espaços pior caso:  O(n) total, O(1) auxiliar
+        Sorting In Place: Yes (Dont need extra list)
+        Stable: No (value on correct index change his initial position)
+     */
+    public static void heapSort(int[] array) {
+        int length = array.length;
+
+        //Build the max heap
+        for (int index = length / 2 - 1; index >= 0; index--) {
+            heapify(array, length, index);
         }
 
-        // Heap sort
-        for (int i = n - 1; i >= 0; i--) {
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
+        //sort the heap
+        for (int index = length - 1; index > 0; index --) {
+            swap(array, 0, index);
+            heapify(array, index, 0);
+        }
 
-            // Heapify root element
-            heapify(arr, i, 0);
+        System.out.println(Arrays.toString(array));
+    }
+
+    public static void heapify(int[] array, int length, int index) {
+        int max = index;
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
+
+        //Compare left and right child nodes to
+        //find the index of the max code
+        if (left < length && array[left] > array[max]) {
+            max = left;
+        }
+        if (right < length && array[right] > array[max]) {
+            max = right;
+        }
+
+        if (max != index) { //If max is child node
+            swap(array, index, max);
+            //Recursively heapify the sub-tree
+            heapify(array, length, max);
         }
     }
 
-    public static void heapify(int arr[], int n, int i) {
-        // Find largest among root, left child and right child
-        int largest = i;
-        int l = 2 * i + 1;
-        int r = 2 * i + 2;
-
-        if (l < n && arr[l] > arr[largest])
-            largest = l;
-
-        if (r < n && arr[r] > arr[largest])
-            largest = r;
-
-        // Swap and continue heapifying if root is not largest
-        if (largest != i) {
-            int swap = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = swap;
-
-            heapify(arr, n, largest);
-        }
+    static void swap(int[] array, int index, int minMax) {
+        int aux = array[index];
+        array[index] = array[minMax];
+        array[minMax] = aux;
     }
 
 }
