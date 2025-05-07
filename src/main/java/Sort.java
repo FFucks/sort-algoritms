@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Sort {
 
     private static final int INIT_VALUE = 0;
-    private static final int MAX_VALUE = 10;
+    private static final int MAX_VALUE = 1000;
 
     public static void main(String[] args) {
 
@@ -33,11 +33,25 @@ public class Sort {
 
         //System.out.println(Arrays.toString(randomCase));
 
+        long startTime = System.nanoTime();
+
         bubbleSort(worstCase);
         //insertionSort(randomCase);
         //selectionSort(randomCase);
         //mergeSort(randomCase, randomCase.length);
         //heapSort(defaultValue);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        System.out.println("Tempo de execução bubble sort: " + duration + " nanossegundos");
+
+        startTime = System.nanoTime();
+
+        heapSort(worstCase);
+
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        System.out.println("Tempo de execução heapsort: " + duration + " nanossegundos");
 
     }
 
@@ -66,7 +80,6 @@ public class Sort {
         Stable: Yes (value on correct index dont change his initial position)
      */
     public static void bubbleSort(int[] array) {
-
         /*System.out.println(Arrays.toString(array));
         int numberOfComparisons = 0;
         int numberOfSwaps = 0;
@@ -220,7 +233,7 @@ public class Sort {
             heapify(array, index, 0);
         }
 
-        System.out.println(Arrays.toString(array));
+        //System.out.println(Arrays.toString(array));
     }
 
     public static void heapify(int[] array, int length, int index) {
