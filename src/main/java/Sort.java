@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Sort {
 
     private static final int INIT_VALUE = 0;
-    private static final int MAX_VALUE = 1000;
+    private static final int MAX_VALUE = 10;
 
     public static void main(String[] args) {
 
@@ -29,29 +29,30 @@ public class Sort {
                 .toArray();
 
         //int [] defaultValue = {4, 3, 6, 8, 7, 1, 0, 5, 2, 9};
-        int [] defaultValue = {0, 3, 1, 4, 2};
+        int [] defaultValue = {0, 3, 1, 4, 2, 5, 7, 6};
 
         //System.out.println(Arrays.toString(randomCase));
 
-        long startTime = System.nanoTime();
+        long startTime = System.currentTimeMillis();
 
-        bubbleSort(worstCase);
+        //bubbleSort(worstCase);
         //insertionSort(randomCase);
         //selectionSort(randomCase);
         //mergeSort(randomCase, randomCase.length);
         //heapSort(defaultValue);
+        quickSort(defaultValue);
 
-        long endTime = System.nanoTime();
+        long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        System.out.println("Tempo de execução bubble sort: " + duration + " nanossegundos");
+        System.out.println("Tempo de execução bubble sort: " + duration + " milisegundos");
 
-        startTime = System.nanoTime();
+        startTime = System.currentTimeMillis();
 
         heapSort(worstCase);
 
-        endTime = System.nanoTime();
+        endTime = System.currentTimeMillis();
         duration = endTime - startTime;
-        System.out.println("Tempo de execução heapsort: " + duration + " nanossegundos");
+        System.out.println("Tempo de execução heapsort: " + duration + " milisegundos");
 
     }
 
@@ -67,11 +68,52 @@ public class Sort {
     */
 
 
+    /* QuickSort
+        Complexidade Pior caso:             O(n^{2})
+        Complexidade Caso medio:            O(n log n)
+        Complexidade Melhor caso:           O(n log n)
+        Complexidade de espaços pior caso:  O(n)
+        Sorting In Place: Yes (Dont need extra list)
+        Stable: No (value on correct index change his initial position)
+    */
+    private static void quickSort(int[] array) {
+        quickSort(array, 0, array.length - 1);
+    }
+
+    public static void quickSort(int[] array, int lowIndex, int highIndex) {
+        if (lowIndex >= highIndex) {
+            return;
+        }
+        int pivotIndex = new Random().nextInt(highIndex - lowIndex) + lowIndex;
+        /*int pivot = array[highIndex];*/
+        int pivot = array[pivotIndex];
+        swap(array, pivotIndex, highIndex);
+
+        int leftPointer = partitioning(array, lowIndex, highIndex, pivot);
+
+        swap(array, leftPointer, highIndex);
+        quickSort(array, lowIndex, leftPointer - 1);
+        quickSort(array, leftPointer + 1, highIndex);
+    }
+
+    private static int partitioning(int[] array, int lowIndex, int highIndex, int pivot) {
+        int leftPointer = lowIndex;
+        int rightPointer = highIndex;
+
+        while(leftPointer < rightPointer) {
+            while (array[leftPointer] <= pivot && leftPointer < rightPointer) {
+                leftPointer++;
+            }
+            while(array[rightPointer] >= pivot && leftPointer < rightPointer) {
+                rightPointer--;
+            }
+            swap(array, leftPointer, rightPointer);
+        }
+        return leftPointer;
+    }
 
 
     /*
-
-
         Complexidade Pior caso:             O(n^{2})
         Complexidade Caso medio:            O(n^{2})
         Complexidade Melhor caso:           O(n)
@@ -209,7 +251,7 @@ public class Sort {
     }
 
     /*
-        Sort que utiliza arvore binaria, funciona em duas etapas, primeiro ordena os nodos com valores maiores que os leafs,
+        HeapSort utiliza arvore binaria, funciona em duas etapas, primeiro ordena os nodos com valores maiores que os leafs,
         depois faz o sort pegando o topo da piramide com o ultimo leaf (ponta do array), desconsidera o valor adicionado nas seguintes trocas e faz o processo novamente.
 
         Complexidade Pior caso:             O(n log n)
