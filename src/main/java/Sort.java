@@ -40,7 +40,8 @@ public class Sort {
         //selectionSort(randomCase);
         //mergeSort(randomCase, randomCase.length);
         //heapSort(defaultValue);
-        quickSort(defaultValue);
+        //quickSort(defaultValue);
+        //blockSort(defaultValue);
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
@@ -56,6 +57,7 @@ public class Sort {
 
     }
 
+
     /*
         -------------------------------- Big O Notation ------------------------------
         O(1) (Constante): O tempo de execução é constante, não importa o tamanho da entrada.
@@ -66,6 +68,16 @@ public class Sort {
         O(2ⁿ) (Exponencial): O tempo de execução cresce muito rapidamente, tornando-se impraticável para entradas moderadamente grandes.
         --------------------------------------------------------------------------------
     */
+
+    /* BlockSort
+        Complexidade Pior caso:             O(n log n)
+        Complexidade Caso medio:            O(n log n)
+        Complexidade Melhor caso:           O(n)
+        Complexidade de espaços pior caso:  Worst-case space complexity	O(1)
+        Sorting In Place: Yes (Dont need extra list)
+        Stable: Yes (value on correct index change his initial position)
+    */
+
 
 
     /* QuickSort
