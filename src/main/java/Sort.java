@@ -41,7 +41,9 @@ public class Sort {
         //mergeSort(randomCase, randomCase.length);
         //heapSort(defaultValue);
         //quickSort(defaultValue);
+        //coutingSort(defaultValue);
         //blockSort(defaultValue);
+        shellSort(defaultValue);
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
@@ -68,6 +70,38 @@ public class Sort {
         O(2ⁿ) (Exponencial): O tempo de execução cresce muito rapidamente, tornando-se impraticável para entradas moderadamente grandes.
         --------------------------------------------------------------------------------
     */
+
+    /* ShellSort it is a generallization(optimization) of insertionSort
+
+     */
+    public static void shellSort(int[] array) {
+        int length = array.length;
+
+        // Start with a big gap, then reduce the gap
+        for (int gap = length / 2; gap > 0; gap /= 2) {
+
+            // Do a gapped insertion sort for this gap size.
+            for (int i = gap; i < length; i++) {
+                int temp = array[i];
+                int j;
+
+                // Shift earlier gap-sorted elements up until the correct location is found
+                for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
+                    array[j] = array[j - gap];
+                }
+
+                // Put temp (the original a[i]) in its correct location
+                array[j] = temp;
+            }
+        }
+    }
+
+    /* CoutingSort
+
+     */
+    private static void coutingSort(int[] array) {
+
+    }
 
     /* BlockSort
         Complexidade Pior caso:             O(n log n)
