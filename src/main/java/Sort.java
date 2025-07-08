@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Sort {
 
     private static final int INIT_VALUE = 0;
-    private static final int MAX_VALUE = 10;
+    private static final int MAX_VALUE = 1000000;
 
     public static void main(String[] args) {
 
@@ -42,8 +42,8 @@ public class Sort {
         //heapSort(defaultValue);
         //quickSort(defaultValue);
         //coutingSort(defaultValue);
-        //blockSort(defaultValue);
-        shellSort(defaultValue);
+        blockSort(defaultValue);
+        //shellSort(defaultValue);
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
@@ -51,7 +51,7 @@ public class Sort {
 
         startTime = System.currentTimeMillis();
 
-        heapSort(worstCase);
+        blockSort(worstCase);
 
         endTime = System.currentTimeMillis();
         duration = endTime - startTime;
@@ -110,7 +110,43 @@ public class Sort {
         Complexidade de espaços pior caso:  Worst-case space complexity	O(1)
         Sorting In Place: Yes (Dont need extra list)
         Stable: Yes (value on correct index change his initial position)
+
+        One practical algorithm for O(n log n) in-place merging was proposed by Pok-Son Kim and Arne Kutzner in 2008.[1]
     */
+
+    public static void blockSort(int[] arr) {
+        int blockSize = (int) Math.sqrt(arr.length);
+
+        int n = arr.length;
+
+        // Step 1: Sort blocks individually
+        for (int i = 0; i < n; i += blockSize) {
+            int end = Math.min(i + blockSize, n);
+            Arrays.sort(arr, i, end);  // You can use insertion sort for smaller blocks
+        }
+
+        // Step 2: Merge blocks pair by pair
+        int[] temp = new int[n];
+        for (int size = blockSize; size < n; size *= 2) {
+            for (int left = 0; left < n; left += 2 * size) {
+                int mid = Math.min(left + size, n);
+                int right = Math.min(left + 2 * size, n);
+                mergeBlock(arr, temp, left, mid, right);
+            }
+        }
+    }
+
+    // Helper function to merge two sorted parts
+    private static void mergeBlock(int[] arr, int[] temp, int left, int mid, int right) {
+        int i = left, j = mid, k = left;
+        while (i < mid && j < right) {
+            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
+            else temp[k++] = arr[j++];
+        }
+        while (i < mid) temp[k++] = arr[i++];
+        while (j < right) temp[k++] = arr[j++];
+        for (i = left; i < right; i++) arr[i] = temp[i];
+    }
 
 
 
