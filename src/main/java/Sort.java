@@ -42,7 +42,7 @@ public class Sort {
         //heapSort(defaultValue);
         //quickSort(defaultValue);
         //coutingSort(defaultValue);
-        blockSort(defaultValue);
+        //blockSort(defaultValue);
         //shellSort(defaultValue);
 
         long endTime = System.currentTimeMillis();
@@ -386,5 +386,6 @@ public class Sort {
         array[index] = array[minMax];
         array[minMax] = aux;
     }
+
 
 }
