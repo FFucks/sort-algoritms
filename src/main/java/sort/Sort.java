@@ -1,66 +1,9 @@
+package sort;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 public class Sort {
-
-    private static final int INIT_VALUE = 0;
-    private static final int MAX_VALUE = 1000000;
-
-    public static void main(String[] args) {
-
-        int[] randomCase = new Random().ints(INIT_VALUE, MAX_VALUE)
-                .distinct()
-                .limit(MAX_VALUE)
-                .boxed()
-                .mapToInt(Integer::intValue).toArray();
-
-        int[] worstCase = IntStream.rangeClosed(INIT_VALUE, MAX_VALUE)
-                .boxed()
-                .sorted(Collections.reverseOrder())
-                .mapToInt(Integer::intValue)
-                .toArray();
-
-        int [] bestCase = IntStream.rangeClosed(INIT_VALUE, MAX_VALUE)
-                .boxed()
-                .sorted()
-                .mapToInt(Integer::intValue)
-                .toArray();
-
-        //int [] defaultValue = {4, 3, 6, 8, 7, 1, 0, 5, 2, 9};
-        int [] defaultValue = {0, 3, 1, 4, 2, 5, 7, 6};
-
-        //System.out.println(Arrays.toString(randomCase));
-
-        long startTime = System.currentTimeMillis();
-
-        bubbleSort(defaultValue);
-        insertionSort(defaultValue);
-        selectionSort(defaultValue);
-        mergeSort(defaultValue);
-        heapSort(defaultValue);
-        quickSort(defaultValue);
-        countingSort(defaultValue);
-        blockSort(defaultValue);
-        shellSort(defaultValue);
-        radixSort(defaultValue);
-
-        long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime;
-        System.out.println("Tempo de execução bubble sort: " + duration + " milisegundos");
-
-        startTime = System.currentTimeMillis();
-
-        blockSort(worstCase);
-
-        endTime = System.currentTimeMillis();
-        duration = endTime - startTime;
-        System.out.println("Tempo de execução heapsort: " + duration + " milisegundos");
-
-    }
-
-
     /*
         -------------------------------- Big O Notation ------------------------------
         O(1) (Constante): O tempo de execução é constante, não importa o tamanho da entrada.
@@ -75,7 +18,7 @@ public class Sort {
     /* RadixSort
 
      */
-    public static void radixSort(int[] arr) {
+    public void radixSort(int[] arr) {
         if (arr.length == 0) return;
 
         // Find the maximum value to know the number of digits
@@ -88,7 +31,7 @@ public class Sort {
         }
     }
 
-    private static void countingSortByDigit(int[] arr, int exp) {
+    private void countingSortByDigit(int[] arr, int exp) {
         int n = arr.length;
         int[] output = new int[n];
         int[] count = new int[10]; // digits 0–9
@@ -120,7 +63,7 @@ public class Sort {
     /* ShellSort it is a generalization(optimization) of insertionSort
 
      */
-    public static void shellSort(int[] array) {
+    public void shellSort(int[] array) {
         int length = array.length;
 
         // Start with a big gap, then reduce the gap
@@ -145,7 +88,7 @@ public class Sort {
     /* CoutingSort
 
      */
-    public static void countingSort(int[] arr) {
+    public void countingSort(int[] arr) {
         if (arr.length == 0) {
             return;
         }
@@ -195,12 +138,12 @@ public class Sort {
 
         One practical algorithm for O(n log n) in-place merging was proposed by Pok-Son Kim and Arne Kutzner in 2008.[1]
     */
-    public static void blockSort(int[] arr) {
+    public void blockSort(int[] arr) {
         int blockSize = (int) Math.sqrt(arr.length);
 
         int n = arr.length;
 
-        // Step 1: Sort blocks individually
+        // Step 1: sort.Sort blocks individually
         for (int i = 0; i < n; i += blockSize) {
             int end = Math.min(i + blockSize, n);
             Arrays.sort(arr, i, end);  // You can use insertion sort for smaller blocks
@@ -218,7 +161,7 @@ public class Sort {
     }
 
     // Helper function to merge two sorted parts
-    private static void mergeBlock(int[] arr, int[] temp, int left, int mid, int right) {
+    private void mergeBlock(int[] arr, int[] temp, int left, int mid, int right) {
         int i = left, j = mid, k = left;
         while (i < mid && j < right) {
             if (arr[i] <= arr[j]) temp[k++] = arr[i++];
@@ -239,11 +182,11 @@ public class Sort {
         Sorting In Place: Yes (Dont need extra list)
         Stable: No (value on correct index change his initial position)
     */
-    private static void quickSort(int[] array) {
+    public void quickSort(int[] array) {
         quickSort(array, 0, array.length - 1);
     }
 
-    public static void quickSort(int[] array, int lowIndex, int highIndex) {
+    public void quickSort(int[] array, int lowIndex, int highIndex) {
         if (lowIndex >= highIndex) {
             return;
         }
@@ -259,7 +202,7 @@ public class Sort {
         quickSort(array, leftPointer + 1, highIndex);
     }
 
-    private static int partitioning(int[] array, int lowIndex, int highIndex, int pivot) {
+    private int partitioning(int[] array, int lowIndex, int highIndex, int pivot) {
         int leftPointer = lowIndex;
         int rightPointer = highIndex;
 
@@ -284,7 +227,7 @@ public class Sort {
         Sorting in place: Yes (Dont need extra list)
         Stable: Yes (value on correct index dont change his initial position)
      */
-    public static void bubbleSort(int[] array) {
+    public void bubbleSort(int[] array) {
         /*System.out.println(Arrays.toString(array));
         int numberOfComparisons = 0;
         int numberOfSwaps = 0;
@@ -324,12 +267,11 @@ public class Sort {
         Sorting In Place: Yes (Dont need extra list)
         Stable: Yes (value on correct index dont change his initial position)
      */
-    public static void insertionSort(int[] numberVector) {
+    public void insertionSort(int[] numberVector) {
         int numberOfInteractions = 0;
 
         for (int index = 1; index < numberVector.length; index++){
             numberOfInteractions ++;
-            System.out.println(Arrays.toString(numberVector));
             int key = numberVector[index];
             int compareIndex = index;
 
@@ -338,15 +280,12 @@ public class Sort {
                 numberVector[compareIndex] = numberVector[compareIndex - 1];
                 compareIndex -= 1;
 
-                System.out.println(Arrays.toString(numberVector));
             }
             numberVector[compareIndex] = key;
-            System.out.println(Arrays.toString(numberVector));
         }
-        System.out.println("Number of interactions: " + numberOfInteractions);
     }
 
-    static void selectionSort(int[] numberVector){
+    public void selectionSort(int[] numberVector){
         int n = numberVector.length;
         for (int i = 0; i < n - 1; i++) {
 
@@ -373,11 +312,11 @@ public class Sort {
         }
     }
 
-    public static void mergeSort(int [] array) {
+    public void mergeSort(int[] array) {
         mergeSort(array, array.length);
     }
 
-    public static void mergeSort(int[] numberVector, int n) {
+    private void mergeSort(int[] numberVector, int n) {
         if (n < 2) {
             return;
         }
@@ -397,7 +336,7 @@ public class Sort {
         merge(numberVector, l, r, mid, n - mid);
     }
 
-    public static void merge(
+    public void merge(
             int[] a, int[] l, int[] r, int left, int right) {
 
         int i = 0, j = 0, k = 0;
@@ -428,7 +367,7 @@ public class Sort {
         Sorting In Place: Yes (Dont need extra list)
         Stable: No (value on correct index change his initial position)
      */
-    public static void heapSort(int[] array) {
+    public void heapSort(int[] array) {
         int length = array.length;
 
         //Build the max heap
@@ -445,7 +384,7 @@ public class Sort {
         //System.out.println(Arrays.toString(array));
     }
 
-    public static void heapify(int[] array, int length, int index) {
+    public void heapify(int[] array, int length, int index) {
         int max = index;
         int left = 2 * index + 1;
         int right = 2 * index + 2;
@@ -466,7 +405,7 @@ public class Sort {
         }
     }
 
-    static void swap(int[] array, int index, int minMax) {
+    public void swap(int[] array, int index, int minMax) {
         int aux = array[index];
         array[index] = array[minMax];
         array[minMax] = aux;
