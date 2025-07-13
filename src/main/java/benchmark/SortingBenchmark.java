@@ -31,9 +31,9 @@ public class SortingBenchmark {
                 .mapToInt(Integer::intValue)
                 .toArray();
 
-        benchmarkAndPrint("BEST CASE  (array já ordenado)", bestCase);
-        benchmarkAndPrint("WORST CASE (array inverso)",      worstCase);
-        benchmarkAndPrint("RANDOM CASE (valores aleatórios)", randomCase);
+        benchmarkAndPrint("BEST CASE  (ordered array)", bestCase);
+        benchmarkAndPrint("WORST CASE (inverse array)", worstCase);
+        benchmarkAndPrint("RANDOM CASE (random array)", randomCase);
     }
 
     /**

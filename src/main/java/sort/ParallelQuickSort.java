@@ -4,6 +4,32 @@ import java.util.Arrays;
 
 public class ParallelQuickSort {
 
+    // Exemplo de uso e medição de desempenho
+    public static void main(String[] args) throws InterruptedException {
+        int n = 1000000;
+        int[] original = new int[n];
+        for (int i = 0; i < n; i++) {
+            original[i] = (int)(Math.random() * n);
+        }
+
+        int[] a1 = Arrays.copyOf(original, n);
+        int[] a2 = Arrays.copyOf(original, n);
+
+        // QuickSort sequencial
+        long t0 = System.nanoTime();
+        quickSort(a1, 0, a1.length - 1);
+        long t1 = System.nanoTime();
+
+        // QuickSort paralelo
+        long t2 = System.nanoTime();
+        parallelQuickSort(a2);
+        long t3 = System.nanoTime();
+
+        System.out.println("Quicksort Time with 1.000.000 random values:");
+        System.out.printf("Sequential: %,.3f ms%n", (t1 - t0) / 1e6);
+        System.out.printf("Paralell:   %,.3f ms%n", (t3 - t2) / 1e6);
+    }
+
     // Tamanho mínimo para paralelizar; abaixo disso, ordena-se sequencialmente
     private static final int THRESHOLD = 16_000;
 
@@ -73,30 +99,5 @@ public class ParallelQuickSort {
         arr[j] = tmp;
     }
 
-    // Exemplo de uso e medição de desempenho
-    public static void main(String[] args) throws InterruptedException {
-        int n = 1_000_000;
-        int[] original = new int[n];
-        for (int i = 0; i < n; i++) {
-            original[i] = (int)(Math.random() * n);
-        }
 
-        int[] a1 = Arrays.copyOf(original, n);
-        int[] a2 = Arrays.copyOf(original, n);
-
-        // QuickSort sequencial
-        long t0 = System.nanoTime();
-        quickSort(a1, 0, a1.length - 1);
-        long t1 = System.nanoTime();
-
-        // QuickSort paralelo
-        long t2 = System.nanoTime();
-        parallelQuickSort(a2);
-        long t3 = System.nanoTime();
-
-        System.out.printf("Sequencial: %,.3f ms%n", (t1 - t0) / 1e6);
-        System.out.printf("Paralelo:   %,.3f ms%n", (t3 - t2) / 1e6);
-        // Para validar que ordenou corretamente:
-        System.out.println("Ordenação correta? " + Arrays.equals(a1, a2));
-    }
 }

@@ -4,6 +4,33 @@ import java.util.Arrays;
 
 public class MergeQuickSort {
 
+    // Exemplo de uso e comparação simples
+    public static void main(String[] args) {
+        int n = 100000;
+        int[] original = new int[n];
+        for (int i = 0; i < n; i++) {
+            original[i] = (int)(Math.random() * n);
+        }
+        int[] a1 = Arrays.copyOf(original, original.length);
+        int[] a2 = Arrays.copyOf(original, original.length);
+
+        // Medindo QuickSort puro
+        long t0 = System.nanoTime();
+        quickSort(a1, 0, a1.length - 1);
+        long t1 = System.nanoTime();
+
+        // Medindo Merge+QuickSort híbrido
+        long t2 = System.nanoTime();
+        hybridSort(a2);
+        long t3 = System.nanoTime();
+
+        /*System.out.println("QuickSort puro: " + " (tempo = " + (t1 - t0) + " ns)");
+        System.out.println("Merge+QuickSort híbrido:  " + " (tempo = " + (t3 - t2) + " ns)");*/
+        System.out.println("Sort Time with 100.000 random values:");
+        System.out.printf("QuickSort pure:     %,.3f ms%n", (t1 - t0) / 1e6);
+        System.out.printf("Merge + QuickSort:  %,.3f ms%n", (t3 - t2) / 1e6);
+    }
+
     // Metodo público que dispara o Hybrid Sort
     public static void hybridSort(int[] arr) {
         if (arr == null || arr.length < 2) return;
@@ -79,25 +106,4 @@ public class MergeQuickSort {
         arr[j] = tmp;
     }
 
-    // Exemplo de uso e comparação simples
-    public static void main(String[] args) {
-        int[] original = { 5, 2, 9, 1, 5, 6, 3, 7, 4, 8 };
-        int[] a1 = Arrays.copyOf(original, original.length);
-        int[] a2 = Arrays.copyOf(original, original.length);
-
-        // Medindo QuickSort puro
-        long t0 = System.nanoTime();
-        quickSort(a1, 0, a1.length - 1);
-        long t1 = System.nanoTime();
-
-        // Medindo Merge+QuickSort híbrido
-        long t2 = System.nanoTime();
-        hybridSort(a2);
-        long t3 = System.nanoTime();
-
-        System.out.println("QuickSort puro:           " + Arrays.toString(a1)
-                + " (tempo = " + (t1 - t0) + " ns)");
-        System.out.println("Merge+QuickSort híbrido:  " + Arrays.toString(a2)
-                + " (tempo = " + (t3 - t2) + " ns)");
-    }
 }

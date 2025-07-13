@@ -16,7 +16,12 @@ public class Sort {
     */
 
     /* RadixSort
-
+        Complexidade Pior caso:             O(nk)
+        Complexidade Caso medio:            O(nk)
+        Complexidade Melhor caso:           O(nk)
+        Complexidade de espaços pior caso:  Worst-case space complexity	O(n + k)
+        Sorting In Place: No (Dont need extra list)
+        Stable: Yes (value on correct index change his initial position)
      */
     public void radixSort(int[] arr) {
         if (arr.length == 0) return;
@@ -61,7 +66,12 @@ public class Sort {
     }
 
     /* ShellSort it is a generalization(optimization) of insertionSort
-
+        Complexidade Pior caso:             O(n²)
+        Complexidade Caso medio:            O(n log² n)
+        Complexidade Melhor caso:           O(n log² n)
+        Complexidade de espaços pior caso:  Worst-case space complexity	O(n + k)
+        Sorting In Place: Yes (Need extra list)
+        Stable: No (value on correct index change his initial position)
      */
     public void shellSort(int[] array) {
         int length = array.length;
@@ -86,7 +96,12 @@ public class Sort {
     }
 
     /* CoutingSort
-
+        Complexidade Pior caso:             O(n + k)
+        Complexidade Caso medio:            O(n + k)
+        Complexidade Melhor caso:           O(n + k)
+        Complexidade de espaços pior caso:  Worst-case space complexity	O(n + k)
+        Sorting In Place: Yes (Need extra list)
+        Stable: No (value on correct index change his initial position)
      */
     public void countingSort(int[] arr) {
         if (arr.length == 0) {
