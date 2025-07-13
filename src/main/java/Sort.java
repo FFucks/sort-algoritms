@@ -35,15 +35,16 @@ public class Sort {
 
         long startTime = System.currentTimeMillis();
 
-        //bubbleSort(worstCase);
-        //insertionSort(randomCase);
-        //selectionSort(randomCase);
-        //mergeSort(randomCase, randomCase.length);
-        //heapSort(defaultValue);
-        //quickSort(defaultValue);
-        //coutingSort(defaultValue);
-        //blockSort(defaultValue);
-        //shellSort(defaultValue);
+        bubbleSort(defaultValue);
+        insertionSort(defaultValue);
+        selectionSort(defaultValue);
+        mergeSort(defaultValue);
+        heapSort(defaultValue);
+        quickSort(defaultValue);
+        countingSort(defaultValue);
+        blockSort(defaultValue);
+        shellSort(defaultValue);
+        radixSort(defaultValue);
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
@@ -71,7 +72,52 @@ public class Sort {
         --------------------------------------------------------------------------------
     */
 
-    /* ShellSort it is a generallization(optimization) of insertionSort
+    /* RadixSort
+
+     */
+    public static void radixSort(int[] arr) {
+        if (arr.length == 0) return;
+
+        // Find the maximum value to know the number of digits
+        int max = Arrays.stream(arr).max().getAsInt();
+
+        // Perform counting sort for each digit position
+        // exp = 1, 10, 100, ...
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            countingSortByDigit(arr, exp);
+        }
+    }
+
+    private static void countingSortByDigit(int[] arr, int exp) {
+        int n = arr.length;
+        int[] output = new int[n];
+        int[] count = new int[10]; // digits 0–9
+
+        // Count occurrences of each digit in this place (exp)
+        for (int value : arr) {
+            int digit = (value / exp) % 10;
+            count[digit]++;
+        }
+
+        // Transform count[] so that count[i] contains the actual
+        // position of this digit in output[]
+        for (int i = 1; i < 10; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // Build the output array from right to left to maintain stability
+        for (int i = n - 1; i >= 0; i--) {
+            int value = arr[i];
+            int digit = (value / exp) % 10;
+            output[count[digit] - 1] = value;
+            count[digit]--;
+        }
+
+        // Copy the output array back into arr[]
+        System.arraycopy(output, 0, arr, 0, n);
+    }
+
+    /* ShellSort it is a generalization(optimization) of insertionSort
 
      */
     public static void shellSort(int[] array) {
@@ -99,8 +145,44 @@ public class Sort {
     /* CoutingSort
 
      */
-    private static void coutingSort(int[] array) {
+    public static void countingSort(int[] arr) {
+        if (arr.length == 0) {
+            return;
+        }
 
+        // 1. Find the maximum value to know the range
+        int max = arr[0];
+        for (int num : arr) {
+            if (num > max) {
+                max = num;
+            }
+        }
+
+        // 2. Initialize count array
+        int[] count = new int[max + 1];
+
+        // 3. Count frequencies
+        for (int num : arr) {
+            count[num]++;
+        }
+
+        // 4. Compute cumulative counts to get positions (makes it stable)
+        for (int i = 1; i < count.length; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // 5. Build the output array
+        int[] output = new int[arr.length];
+        // Iterate backwards to maintain stability
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int num = arr[i];
+            int pos = count[num] - 1;    // position in output
+            output[pos] = num;
+            count[num]--;                // decrement count for next
+        }
+
+        // 6. Copy sorted values back into original array
+        System.arraycopy(output, 0, arr, 0, arr.length);
     }
 
     /* BlockSort
@@ -113,7 +195,6 @@ public class Sort {
 
         One practical algorithm for O(n log n) in-place merging was proposed by Pok-Son Kim and Arne Kutzner in 2008.[1]
     */
-
     public static void blockSort(int[] arr) {
         int blockSize = (int) Math.sqrt(arr.length);
 
@@ -290,6 +371,10 @@ public class Sort {
             numberVector[i] = numberVector[min_idx];
             numberVector[min_idx] = temp;
         }
+    }
+
+    public static void mergeSort(int [] array) {
+        mergeSort(array, array.length);
     }
 
     public static void mergeSort(int[] numberVector, int n) {
